@@ -1,5 +1,6 @@
 import time
 import board
+import microcontroller
 import wifi
 import adafruit_shtc3
 import socketpool
@@ -18,7 +19,8 @@ try:
     print("Connecting to %s" % secrets["ssid"])
     wifi.radio.connect(secrets["ssid"], secrets["password"])
     print("Connected to %s!" % secrets["ssid"])
-# Wi-Fi connectivity fails with error messages, not specific errors, so this except is broad.
+# Wi-Fi connectivity fails with error messages, 
+# not specific errors, so this except is broad.
 except Exception as e:
     print("Failed to connect to WiFi. Error:", e, "\nBoard will hard reset in 30 seconds.")
     time.sleep(30)
@@ -77,7 +79,12 @@ mqtt_client.on_publish = publish
 mqtt_client.on_message = message
 
 # Connect the client to the MQTT broker.
-mqtt_client.connect()
+try:
+    mqtt_client.connect()
+except Exception as e:
+    print("Failed to connect to Broker. Error:", e, "\nBoard will hard reset in 30 seconds.")
+    time.sleep(30)
+    microcontroller.reset()
 
 i2c = board.I2C()  # uses board.SCL and board.SDA
 sht = adafruit_shtc3.SHTC3(i2c)
