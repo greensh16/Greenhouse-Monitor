@@ -87,8 +87,13 @@ while True:
     print("Temperature: %0.1f C" % temperature)
     print("Humidity: %0.1f %%" % relative_humidity)
     print("")
-
-    mqtt_client.loop()
-    mqtt_client.publish("homeassistant/sensor/shtc3_temp", temperature)
-
-    time.sleep(30)
+    
+    try:
+        mqtt_client.loop()
+        mqtt_client.publish("homeassistant/sensor/shtc3_temp", temperature)
+        time.sleep(30)
+    except Exception as err:
+        print("An error occured: {}".format(err))
+        wifi.reset()
+        wifi.connect()
+        mqtt_client.reconnect()
