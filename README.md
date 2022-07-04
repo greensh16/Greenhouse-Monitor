@@ -61,7 +61,7 @@ pin.value = False
 
 NOTE: For ESP32's (including this ESP32-S2), PINs are put HIGH for a short period of time at start up. I've needed to add a 1K resistor between the DONE and IN (gnd) to pull down the PIN enough to stop the TPL5110 cutting power every Feather boot-up.
 
-## Circuit diagram
+### Circuit diagram
 
 ![My Image](Images/TPL5110Circuit.jpeg)
 
