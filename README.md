@@ -16,7 +16,7 @@
 - Stemma QT cables (QWIIC/PiicoDEV) - [Link](https://core-electronics.com.au/piicodev-cable-200mm.html)
 - Wire
 
-## Temperature + Humidity
+## Temperature/Humidity/Pressure
 
 I'm using a BME280 to measure the temperature and humidity, it's my go to sensor for this sort of stuff. The specific one I'm using here has a Stemma QT connection so I don't need to solder it, which is nice. 
 
@@ -37,3 +37,35 @@ print("\nTemperature: %0.1f C" % bme280.temperature)
 print("Humidity: %0.1f %%" % bme280.humidity)
 print("Pressure: %0.1f hPa" % bme280.pressure)
 ```
+
+- Print a case to keep the sensor protected. STL files [Here](https://feathers2.io)
+
+## TPL5110 power timer
+
+I've used this little board to help reduce the daily power needed to run my sensors. Works like a charm so far. Great guide [Here](https://core-electronics.com.au/guides/raspberry-pi-pico/makerverse-nano-power-timer/).
+
+Code for CircuitPython:
+```python
+import digitalio
+
+# Set-up pin to LOW, ready to send TPL5110 a signal.
+pin = digitalio.DigitalInOut(board.D20)
+pin.direction = digitalio.Direction.OUTPUT
+pin.value = False
+
+# Send TPL5110 a signal:
+    pin.value = True
+```
+
+NOTE: For ESP32's (including this ESP32-S2), PINs are put HIGH for a short period of time at start up. I've needed to add a 1K resistor between the DONE and IN (gnd) to pull down the PIN enough to stop the TPL5110 cutting power every Feather boot-up.
+
+![My Image](Images/bme280.jpg)
+
+##  Moisture Sensor
+
+Working on this next.
+
+
+## Solar powered
+
+Waiting for a sunny period to test this.
