@@ -40,6 +40,8 @@ print("Pressure: %0.1f hPa" % bme280.pressure)
 
 - Print a case to keep the sensor protected. STL files [Here](https://feathers2.io)
 
+![My Image](Images/bme280.jpg)
+
 ## TPL5110 power timer
 
 I've used this little board to help reduce the daily power needed to run my sensors. Works like a charm so far. Great guide [Here](https://core-electronics.com.au/guides/raspberry-pi-pico/makerverse-nano-power-timer/).
@@ -58,8 +60,6 @@ pin.value = False
 ```
 
 NOTE: For ESP32's (including this ESP32-S2), PINs are put HIGH for a short period of time at start up. I've needed to add a 1K resistor between the DONE and IN (gnd) to pull down the PIN enough to stop the TPL5110 cutting power every Feather boot-up.
-
-![My Image](Images/bme280.jpg)
 
 ##  Moisture Sensor
 
