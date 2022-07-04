@@ -1,17 +1,22 @@
 import time
 import math
 import board
-import busio
+import digitalio
 import microcontroller
 
-import adafruit_shtc3
+# import adafruit_shtc3
 from adafruit_bme280 import basic as adafruit_bme280
-import adafruit_ltr390
+# import adafruit_ltr390
 
 import wifi
 import socketpool
 import ssl
 import adafruit_minimqtt.adafruit_minimqtt as MQTT
+
+# Set-up pin to LOW, ready to send TPL5110 a signal.
+pin = digitalio.DigitalInOut(board.D20)
+pin.direction = digitalio.Direction.OUTPUT
+pin.value = False
 
 # Get wifi details from the secrets.py file
 try:
@@ -101,33 +106,37 @@ except Exception as e:
     microcontroller.reset()
 
 i2c = board.I2C()  # uses board.SCL and board.SDA
-sht = adafruit_shtc3.SHTC3(i2c)
+# sht = adafruit_shtc3.SHTC3(i2c)
 bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c)
-ltr = adafruit_ltr390.LTR390(i2c)
+# ltr = adafruit_ltr390.LTR390(i2c)
 
-while True:
-    temperature, relative_humidity = sht.measurements
-    print("Temperature: %0.1f C" % temperature)
-    print("Humidity: %0.1f %%" % relative_humidity)
-    print("\nTemperature: %0.1f C" % bme280.temperature)
-    print("Humidity: %0.1f %%" % bme280.humidity)
-    print("Pressure: %0.1f hPa" % bme280.pressure)
-    print("")
+#while True:
+#pin.value = False
+#temperature, relative_humidity = sht.measurements
+#print("Temperature: %0.1f C" % temperature)
+#print("Humidity: %0.1f %%" % relative_humidity)
+#print("\nTemperature: %0.1f C" % bme280.temperature)
+#print("Humidity: %0.1f %%" % bme280.humidity)
+#print("Pressure: %0.1f hPa" % bme280.pressure)
+#print("")
     
-    #Dew point
-    b = 17.62
-    c = 243.12
-    gamma = (b * bme280.temperature /(c + bme280.temperature)) + math.log(bme280.humidity / 100.0)
-    dewpoint = (c * gamma) / (b - gamma)
-    print("Dew point: %0.1f" % dewpoint)
-    
-    print("UV:", ltr.uvs, "\t\tAmbient Light:", ltr.light)
-    print("UVI:", ltr.uvi, "\t\tLux:", ltr.lux)
+#Dew point
+#b = 17.62
+#c = 243.12
+#gamma = (b * bme280.temperature /(c + bme280.temperature)) + math.log(bme280.humidity / 100.0)
+#dewpoint = (c * gamma) / (b - gamma)
+#print("Dew point: %0.1f" % dewpoint)
 
-    try:
-        mqtt_client.loop()
-        mqtt_client.publish("homeassistant/sensor/shtc3_temp", temperature)
-        time.sleep(30)
-    except Exception as err:
-        print("An error occured: {}".format(err))
-        microcontroller.reset()
+#print("UV:", ltr.uvs, "\t\tAmbient Light:", ltr.light)
+#print("UVI:", ltr.uvi, "\t\tLux:", ltr.lux)
+
+try:
+    mqtt_client.loop()
+    mqtt_client.publish("homeassistant/sensor/shtc3_temp", bme280.temperature)
+    # Send TPL5110 a signal:
+    pin.value = True
+    time.sleep(5)
+except Exception as err:
+    print("An error occured: {}".format(err))
+    time.sleep(30)
+    microcontroller.reset()
