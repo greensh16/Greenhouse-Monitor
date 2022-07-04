@@ -26,13 +26,14 @@ This part is pretty straight forward really:
 - Just connect the sensor to the Feather S2 using the Stemma QT port.
 - I'm using the 'adafruit_bme280' library and to take readings in CircuitPython:
 
- '''python
+```python
+# Import library:
 from adafruit_bme280 import basic as adafruit_bme280
-
+# Initialise i2c and setup sensor:
 i2c = board.I2C()  # uses board.SCL and board.SDA
 bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c)
-
+# Print out the readings:
 print("\nTemperature: %0.1f C" % bme280.temperature)
 print("Humidity: %0.1f %%" % bme280.humidity)
 print("Pressure: %0.1f hPa" % bme280.pressure)
- '''
+```
