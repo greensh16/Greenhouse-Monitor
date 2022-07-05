@@ -38,7 +38,7 @@ print("Humidity: %0.1f %%" % bme280.humidity)
 print("Pressure: %0.1f hPa" % bme280.pressure)
 ```
 
-- Print a case to keep the sensor protected. STL files [Here](https://feathers2.io)
+- Print a case to keep the sensor protected. STL files [Here](https://www.thingiverse.com/thing:5425651)
 
 ![My Image](Images/bme280.jpg)
 
